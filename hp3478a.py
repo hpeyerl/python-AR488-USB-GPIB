@@ -93,12 +93,12 @@ class AR488(object):
         return self.query("++addr")
 
 if __name__ == "__main__":
-    # Hello World!
-    import time
     with AR488(timeout=4) as gpib:
         print("port name: {}".format(gpib.ser.name))
         print("baudrate: {}".format(gpib.ser.baudrate))
         print("timeout: {}".format(gpib.ser.timeout))
+
+        gpib.set_address(24)
 
         print("reading version from AR488:")
         print(">> " + gpib.query("++ver"))
@@ -110,5 +110,8 @@ if __name__ == "__main__":
         # this doesn't seem necessary, at least with only one controller
         gpib.write("++ifc")
 
+        gpib.write("++auto 3")
+        gpib.query("++read")
+
         while 1:
-            print(">> {}".format(gpib.query("++read")),end='')
+            print(">> {}".format(gpib.read()),end='')
